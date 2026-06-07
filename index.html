@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Portfolio - Lương Quốc Thắng</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- ĐỊNH NGHĨA BIẾN HỆ THỐNG MÀU SẮC (DESIGN TOKENS) --- */
+        :root {
+            --primary: #15803d;       /* Màu xanh lục đậm của UET */
+            --primary-light: #e0f2fe; /* Màu nền xanh nhẹ */
+            --primary-hover: #166534; /* Màu hover */
+            --secondary: #0f172a;     /* Màu xám đậm quý phái */
+            --bg-body: #f8fafc;       /* Màu nền trang */
+            --bg-card: #ffffff;       /* Màu nền thẻ thông tin */
+            --text-main: #1e293b;     /* Màu chữ chính */
+            --text-muted: #64748b;    /* Màu chữ phụ */
+            --border-color: #e2e8f0;  /* Đường viền */
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- THIẾT LẬP NỀN TẢNG CHUNG --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- THANH ĐIỀU HƯỚNG TRÊN (TOP NAVIGATION) --- */
+        .top-navbar {
+            background-color: var(--bg-card);
+            border-b: 1px solid var(--border-color);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-logo {
+            background: linear-gradient(135deg, var(--primary), #059669);
+            color: white;
+            font-weight: 800;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            letter-spacing: -0.025em;
+        }
+
+        .top-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-pdf {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-pdf:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* --- BỐ CỤC CHÍNH (MAIN DASHBOARD LAYOUT) --- */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- THANH MENU BÊN TRÁI (SIDEBAR NAVIGATION) --- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 30;
+        }
+
+        .student-profile-mini {
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #e2e8f0;
+        }
+
+        .student-profile-mini .name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .student-profile-mini .meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .menu-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            list-style: none;
+        }
+
+        .menu-item-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #475569;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .menu-item-btn:hover {
+            background-color: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .menu-item-btn.active {
+            background-color: #f0fdf4;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding-left: 0.75rem;
+        }
+
+        /* --- VÙNG HIỂN THỊ NỘI DUNG (MAIN CONTENT) --- */
+        .main-content {
+            flex: 1;
+            padding: 2rem 3rem;
+            overflow-x: hidden;
+        }
+
+        /* --- THIẾT KẾ TRANG / TAB NỘI DUNG --- */
+        .page-tab {
+            display: none;
+            animation: fadeIn 0.30s ease;
+        }
+
+        .page-tab.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- TIÊU ĐỀ TRANG VÀ BANNER CHUYÊN NGHIỆP --- */
+        .academic-header {
+            background: linear-gradient(135deg, #064e3b, #022c22);
+            color: white;
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .academic-header::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 300px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .academic-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .academic-title {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+
+        .academic-desc {
+            color: #d1fae5;
+            font-size: 0.95rem;
+            max-width: 800px;
+        }
+
+        /* --- THIẾT KẾ CÁC THẺ CARD TRỰC QUAN --- */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .info-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: #cbd5e1;
+        }
+
+        .card-header-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #f0fdf4;
+            color: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-body {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- THIẾT KẾ BẢNG SỐ LIỆU ĐẲNG CẤP (ACADEMIC TABLES) --- */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .academic-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .academic-table th {
+            background-color: #f8fafc;
+            color: var(--secondary);
+            font-weight: 700;
+            padding: 1rem 1.25rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .academic-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        .academic-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* --- HỘP THÔNG BÁO / HIGHLIGHT BOXES --- */
+        .highlight-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box.alert-style {
+            background-color: #fffbeb;
+            border-left-color: #d97706;
+        }
+
+        .highlight-box h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p {
+            font-size: 0.875rem;
+            color: #334155;
+        }
+
+        /* --- MINH CHỨNG HÌNH ẢNH THỰC TẾ --- */
+        .evidence-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8fafc;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .evidence-img {
+            max-width: 100%;
+            max-height: 480px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            background-color: #fff;
+        }
+
+        .evidence-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        /* --- THIẾT KẾ PHÍM TẮT & ĐOẠN CODE --- */
+        kbd {
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+            color: #334155;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1;
+            padding: 2px 5px;
+            white-space: nowrap;
+        }
+
+        code {
+            font-family: monospace;
+            background-color: #f1f5f9;
+            color: #ef4444;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* --- INFOGRAPHIC TƯƠNG TÁC ĐẠO ĐỨC AI (TUẦN 6) --- */
+        .info-cards-interactive {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .interactive-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .num-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: #f0fdf4;
+            color: var(--primary);
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* --- FOOTER CHUYÊN NGHIỆP --- */
+        footer {
+            background-color: var(--secondary);
+            color: #94a3b8;
+            padding: 2rem 0;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        footer h4 {
+            color: #f8fafc;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* --- ĐIỀU CHỈNH GIAO DIỆN MOBILE --- */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-navbar">
+        <div class="brand">
+            <span class="brand-logo">LQT</span>
+            <span class="brand-title">Digital Portfolio</span>
+        </div>
+        <div class="top-nav-actions">
+            <button onclick="window.print()" class="btn-pdf">
+                <i class="fa-solid fa-file-pdf"></i> Xuất bản PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTAINER CHÍNH -->
+    <div class="dashboard-container">
+        
+        <!-- SIDEBAR MENU BÊN TRÁI -->
+        <aside class="sidebar">
+            <div class="student-profile-mini">
+                <div class="name">Lương Quốc Thắng</div>
+                <div class="meta">MSV: 25024169</div>
+                <div class="meta">Lớp: K70A-DS2 (VNU-UET)</div>
+            </div>
+
+            <div>
+                <h4 class="menu-title">Danh mục trang</h4>
+                <ul class="menu-list">
+                    <li>
+                        <button onclick="switchTab('giothieu')" id="btn-giothieu" class="menu-item-btn active">
+                            <i class="fa-solid fa-user-tie"></i> Giới thiệu cá nhân
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai1')" id="btn-bai1" class="menu-item-btn">
+                            <i class="fa-solid fa-folder-tree"></i> Bài 1: Quản lý File
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai2')" id="btn-bai2" class="menu-item-btn">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i> Bài 2: Đánh giá Học thuật
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai3')" id="btn-bai3" class="menu-item-btn">
+                            <i class="fa-solid fa-terminal"></i> Bài 3: Kỹ thuật Prompt AI
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai4')" id="btn-bai4" class="menu-item-btn">
+                            <i class="fa-solid fa-users"></i> Bài 4: Hợp tác số nhóm
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai5')" id="btn-bai5" class="menu-item-btn">
+                            <i class="fa-solid fa-palette"></i> Bài 5: Sáng tạo nội dung
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai6')" id="btn-bai6" class="menu-item-btn">
+                            <i class="fa-solid fa-shield-halved"></i> Bài 6: Đạo đức & C++ SDL
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('bai7')" id="btn-bai7" class="menu-item-btn">
+                            <i class="fa-solid fa-flask"></i> Bài 7: Nghiên cứu Nano Pin
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('tongket')" id="btn-tongket" class="menu-item-btn">
+                            <i class="fa-solid fa-graduation-cap"></i> Đánh giá & Tổng kết
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- VÙNG HIỂN THỊ NỘI DUNG CHÍNH (DYNAMIC CONTENT) -->
+        <main class="main-content">
+
+            <!-- ================= TRANG GIỚI THIỆU ================= -->
+            <section id="giothieu" class="page-tab active">
+                <div class="academic-header">
+                    <span class="academic-badge">Học phần: VNU1001</span>
+                    <h2 class="academic-title">HỒ SƠ NĂNG LỰC SỐ CÁ NHÂN</h2>
+                    <p class="academic-desc">Được xây dựng bởi Lương Quốc Thắng nhằm hệ thống hóa toàn bộ kết quả tự nghiên cứu khoa học, rèn luyện kỹ năng công nghệ số ứng dụng trong suốt học kỳ.</p>
+                </div>
+
+                <div class="grid-cards">
+                    <div class="info-card">
+                        <div class="card-header-icon"><i class="fa-solid fa-user"></i></div>
+                        <h4 class="card-title">Sơ lược bản thân</h4>
+                        <div class="card-body">
+                            <p style="margin-bottom: 0.5rem;"><strong>Sinh viên:</strong> Lương Quốc Thắng</p>
+                            <p style="margin-bottom: 0.5rem;"><strong>Lớp:</strong> K70A-DS2 (Khoa học Dữ liệu)</p>
+                            <p style="margin-bottom: 0.5rem;"><strong>Mã số sinh viên:</strong> 25024169</p>
+                            <p><strong>Cơ sở đào tạo:</strong> Trường Đại học Công nghệ, Đại học Quốc gia Hà Nội (VNU-UET)</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="card-header-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <h4 class="card-title">Sứ mệnh của Portfolio</h4>
+                        <div class="card-body">
+                            Là sinh viên chuyên ngành Khoa học dữ liệu, việc tích lũy và minh chứng cụ thể năng lực số thực tế là điều cốt lõi. Portfolio này lưu trữ chi tiết quy trình, giải thuật và các công trình khoa học do chính mình rèn luyện, cam kết tôn trọng tuyệt đối liêm chính học thuật.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h5>💡 Cam kết tri thức từ Lương Quốc Thắng</h5>
+                    <p>"Trong kỷ nguyên bùng nổ trí tuệ nhân tạo, AI là công cụ tăng tốc tuyệt vời, nhưng sự độc lập tư duy, ý thức đạo đức nghề nghiệp và liêm chính học thuật mới là giá trị quyết định sự thành công lâu dài của một kỹ sư Khoa học dữ liệu UET."</p>
+                </div>
+            </section>
+
+            <!-- ================= BÀI 1: QUẢN LÝ TẬP TIN ================= -->
+            <section id="bai1" class="page-tab">
+                <div class="academic-header">
+                    <span class="academic-badge">Bài tập 1 (Mục 1.4)</span>
+                    <h2 class="academic-title">Thao tác cơ bản với tập tin và thư mục</h2>
+                    <p class="academic-desc">Cách thiết lập hệ thống lưu trữ khoa học, bảo đảm an toàn dữ liệu trên máy tính cá nhân chống lỗi mất mát.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h5>🎯 Mục tiêu học tập</h5>
+                    <p>Hình thành phản xạ quản trị thư mục không dấu, không chứa khoảng trắng để tối ưu hóa việc chạy biến môi trường trong lập trình. Thiết lập thói quen lưu dữ liệu học tập ngoài ổ cứng hệ thống (ổ C:\) để bảo vệ toàn vẹn dữ liệu khi gặp sự cố máy tính.</p>
+                </div>
+
+                <h4 style="margin: 1.5rem 0 0.5rem 0; font-weight: 700;">Quy trình 12 bước chuẩn hóa thư mục học tập</h4>
+                <div class="table-responsive">
+                    <table class="academic-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">Bước</th>
+                                <th style="width: 45%;">Hành động kỹ thuật</th>
+                                <th style="width: 45%;">Ý nghĩa hệ thống</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Nhấn tổ hợp phím <kbd>Win + E</kbd> khởi chạy File Explorer nhanh.</td>
+                                <td>Tối ưu hóa thao tác, không lạm dụng click chuột bừa bãi.</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Truy cập phân vùng ổ đĩa dữ liệu an toàn ổ <code>D:\</code> hoặc <code>E:\</code>.</td>
+                                <td>Tránh lưu tại ổ <code>C:\</code> phòng trường hợp hệ điều hành lỗi phải cài lại.</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Tạo thư mục gốc: Chuột phải &rarr; New &rarr; Folder. Đặt tên <code>ThucHanh_LuongQuocThang</code>.</td>
+                                <td>Tạo vùng chứa bảo mật, chuẩn hóa danh mục không khoảng trắng.</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Nhấp đúp chuột để đi sâu vào bên trong thư mục gốc.</td>
+                                <td>Bắt đầu phân cấp cấu trúc con.</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Nhấp chuột phải &rarr; New &rarr; Text Document. Đặt tên <code>GhiChu.txt</code>.</td>
+                                <td>Tạo tập tin văn bản gốc lưu trữ.</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Nhấn phím tắt <kbd>F2</kbd>, đổi tên tập tin thành <code>GhiChuQuanTrong.txt</code>.</td>
+                                <td>Thao tác đổi tên tệp nhanh và chuẩn xác.</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Tạo thư mục con cấp hai có tên là <code>TaiLieu</code>.</td>
+                                <td>Phân chia vùng con để lưu trữ ngăn nắp hơn.</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Chọn tệp tin gốc &rarr; ấn <kbd>Ctrl + C</kbd>, mở <code>TaiLieu</code> &rarr; ấn <kbd>Ctrl + V</kbd>.</td>
+                                <td>Tạo bản sao lưu tệp tin (Copy & Paste).</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Tại thư mục gốc, tạo tệp <code>DiChuyen.txt</code>. Chọn tệp &rarr; ấn <kbd>Ctrl + X</kbd>, mở <code>TaiLieu</code> &rarr; ấn <kbd>Ctrl + V</kbd>.</td>
+                                <td>Di chuyển toàn vẹn dữ liệu sang vùng an toàn (Cut & Paste).</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Chọn tệp <code>GhiChuQuanTrong.txt</code> trong thư mục con, nhấn nút <kbd>Delete</kbd>.</td>
+                                <td>Xóa tạm thời và chuyển tệp vào Thùng rác (Recycle Bin).</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>Chọn tệp <code>DiChuyen.txt</code>, nhấn giữ <kbd>Shift + Delete</kbd>.</td>
+                                <td>Xóa vĩnh viễn tệp ra khỏi ổ cứng mà không qua Recycle Bin.</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>Mở Recycle Bin trên màn hình nền, click chuột phải tệp gốc chọn <code>Restore</code>.</td>
+                                <td>Khôi phục tệp đã xóa về lại thư mục cũ.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="evidence-container">
+                    <h5 style="font-weight: 700; color: var(--secondary);">📸 Minh chứng Ảnh chụp Thao tác màn hình</h5>
+                    <img class="evidence-img" src="image_6665ee.png" alt="Minh chứng Tuần 1" onerror="this.src='https://placehold.co/800x450/f1f5f9/15803d?text=Screenshot+Tuan+1'">
+                    <span class="evidence-info">File minh chứng định dạng gốc của Thắng: image_6665ee.png</span>
+                </div>
+            </section>
+
+            <!-- ================= BÀI 2: ĐÁNH GIÁ HỌC THUẬT ================= -->
+            <section id="bai2" class="page-tab">
+                <div class="academic-header">
+                    <span class="academic-badge">Bài tập 2 (Mục 2.4)</span>
+                    <h2 class="academic-title">Khai thác và đánh giá thông tin học thuật chuyên sâu</h2>
+                    <p class="academic-desc">Đánh giá hệ thống 10 tài liệu nghiên cứu tác động của AI trong phân tích dữ liệu kinh doanh.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h5>📖 Đề tài lựa chọn của Lương Quốc Thắng</h5>
+                    <p><strong>"Ứng dụng của Trí tuệ nhân tạo (AI) trong phân tích dữ liệu kinh doanh"
